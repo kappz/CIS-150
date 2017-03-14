@@ -2,7 +2,7 @@
 Author: Peter O'Donohue
 Creation Date: 03/07/17
 Modification Date: 03/14/17
-Purpose: 
+Purpose: practice with c++ material
 */
 
 // ProjectOne.cpp
@@ -13,7 +13,7 @@ Purpose:
 
 using namespace std;
 
-// function protoypes
+// function prototypes
 void greeting();
 void menu();
 void quit();
@@ -28,6 +28,12 @@ int computeLCM(int num1, int num2);
 int computeGCD(int num1, int num2);
 int computeMod(int num1, int num2);
 
+/*
+Author: Peter O'Donohue
+Creation Date: 03/07/17
+Modification Date: 03/14/17
+Purpose: main function
+*/
 int main()
 {
 	// main variables
@@ -35,13 +41,6 @@ int main()
 	float numOne = 0.0;
 	float numTwo = 0.0;
 	float resultOne = 0.0;
-	float addition = 0.0; 
-	float subtraction = 0.0;
-	float muliplication = 0.0;
-	float division = 0.0;
-	float root = 0.0;
-	float power = 0.0;
-	float percentage = 0.0;
 	int numThree = 0;
 	int numFour = 0;
 	int resultTwo = 0;
@@ -63,51 +62,47 @@ int main()
 		switch (menuChoice)
 		{
 
-			// if user selects addition
+		// user selects addition
 		case 'A':
+			// collect user inputs
 			cout << "Please enter the first number: ";
 			cin >> numOne;
 			cout << "Please enter the second number: ";
 			cin >> numTwo;
-			// call addition function
-			resultOne = computeSum(numOne, numTwo);
-			// print result
-			cout << numOne << " + " << numTwo << " = " << resultOne << endl;
+			resultOne = computeSum(numOne, numTwo);  // calculate addition and assign value to resultOne
+			cout << numOne << " + " << numTwo << " = " << resultOne << endl;  // display result
 			break;
 
-			// if user selects subraction
+		// user selects subraction
 		case 'B':
+			// collect user inputs
 			cout << "Please enter the first number: ";
 			cin >> numOne;
 			cout << "Please enter the second number: ";
 			cin >> numTwo;
-
-			// call subraction function
-			resultOne = computeSub(numOne, numTwo);
-			cout << numOne << " - " << numTwo << " = " << resultOne << endl;
+			resultOne = computeSub(numOne, numTwo);  // calculate subtraction and assign value to resultOne
+			cout << numOne << " - " << numTwo << " = " << resultOne << endl;  // display result
 			break;
 
 		// user selects multiplication
 		case 'C':	
+			// collect user inputs
 			cout << "Please enter the first number: ";
 			cin >> numOne;
 			cout << "Please enter the second number: ";
 			cin >> numTwo;
-			resultOne = computeMul(numOne, numTwo);		// calculate multiplication
-
-			// display results
-			cout << numOne << " * " << numTwo << " = " << resultOne << endl;
+			resultOne = computeMul(numOne, numTwo);  // calculate multiplication and assign value to resultOne
+			cout << numOne << " * " << numTwo << " = " << resultOne << endl;  // display result
 			break;
-
 
 		// user selects division
 		case 'D' :
-
 			// collect input values
 			cout << "Please enter the first number: ";
 			cin >> numOne;
 			cout << "Please enter the second number: ";
 			cin >> numTwo;
+			// if user divides by zero
 			do
 			{
 				if (numTwo == 0)
@@ -119,21 +114,21 @@ int main()
 					cin >> numTwo;
 				}
 			} while (numTwo == 0);
-			resultOne = computeDiv(numOne, numTwo);		// calculate division and assign value to resultOne
-
-			// display results
-			cout << numOne << " / " << numTwo << " = " << resultOne << endl;
+			resultOne = computeDiv(numOne, numTwo);  // calculate division and assign value to resultOne
+			cout << numOne << " / " << numTwo << " = " << resultOne << endl;  // display results
 			break;
 
-			// if user selects roots
+		// if user selects roots
 		case 'E':
+			// collect input values
 			cout << "Please enter your number: ";
 			cin >> numOne;
 			cout << "Please enter the root value: ";
 			cin >> numThree;
+			// if user attempts to use negative values
 			do
 			{
-				if ((numOne < 0) || (numThree < 0))
+				if ((numOne < 0) || (numThree <= 0))
 				{
 					cout << "Please input postive integers only." << endl;
 					cout << "Please enter your number: ";
@@ -141,33 +136,33 @@ int main()
 					cout << "Please enter the root value: ";
 					cin >> numThree;
 				}
-			} while ((numOne < 0) || (numThree < 0));
-			resultOne = computeRoot(numOne, numThree);
-			cout << numOne << " to the root of " << numThree << " = " << computeRoot(numOne, numThree) << endl;
+			} while ((numOne < 0) || (numThree <= 0));
+			resultOne = computeRoot(numOne, numThree);  // calculate root and assign value to resultOne
+			cout << numOne << " to the root of " << numThree << " = "  //display results
+				 << computeRoot(numOne, numThree) << endl;
 			break;
 
 		// if user selects powers
 		case 'F' :
+			// collect input values
 			cout << "Please enter the base number: ";
 			cin >> numOne;
 			cout << "Please enter the exponent: ";
 			cin >> numThree;
-
-			// call powers function
-			resultOne = computePower(numOne, numThree);
+			// if user inputs negative values
 			do
 			{
 				if ((numOne < 0) || (numThree < 0))
 				{
-					cout << "Please input postive integers only." << endl;
+					cout << "Please input postive integers only." << endl; // prompt user to enter valid values
 					cout << "Enter the base: ";
 					cin >> numOne;
 					cout << "Enter the exponent: ";
 					cin >> numThree;
 				}
 			} while ((numOne < 0) || (numThree < 0));
-			resultOne = computePower(numOne, numThree);
-			cout << numOne << " to the power of " << numThree << " = " << resultOne << endl;
+			resultOne = computePower(numOne, numThree);  // calculate power and assign value to resultOne
+			cout << numOne << " to the power of " << numThree << " = " << resultOne << endl;  // display results
 		break;
 
 		// user selects percentage
@@ -177,8 +172,8 @@ int main()
 			cin >> numOne;
 			cout << "Please enter the desired percentage: ";
 			cin >> numTwo;
-			resultOne = computePerc(numOne, numTwo);
-			cout << numTwo << "% of " << numOne << " is " << resultOne << endl;
+			resultOne = computePerc(numOne, numTwo);  // calculate percentage and assign value to resultOne
+			cout << numTwo << "% of " << numOne << " is " << resultOne << endl;  // display results
 			break;
 
 		// user selects LCM
@@ -188,17 +183,18 @@ int main()
 			cin >> numThree;
 			cout << "please enter the second whole number: ";
 			cin >> numFour;
+			// if user inputs negative values
 			if ((numThree < 0) || (numFour < 0))
 			{
-				cout << "Please use postiive numbers only." << endl;
+				cout << "Please use postiive numbers only." << endl;  // prompt user to enter valid values
 				cout << "Please enter the first whole number: ";
 				cin >> numThree;
 				cout << "please enter the second whole number: ";
 				cin >> numFour;
 			}
-			resultOne = computeLCM(numThree, numFour); // calculate LCM and assign value to resultOne
-			cout << "The LCM of " << numThree << " and " << numFour;
-			cout << " is: " << resultOne << endl; 
+			resultTwo = computeLCM(numThree, numFour);  // calculate LCM and assign value to resultTwo
+			cout << "The LCM of " << numThree << " and " << numFour;  // display result
+			cout << " is: " << resultTwo << endl; 
 			break;
 		
 		// user selects GCD
@@ -208,31 +204,35 @@ int main()
 			cin >> numThree;
 			cout << "Please enter the second whole number: ";
 			cin >> numFour;
+			// if user inputs negative values
 			if ((numThree < 0) || (numFour < 0))
 			{
-				cout << "Please use postiive numbers only." << endl;
+				cout << "Please use postiive numbers only." << endl;  // prompt user to enter valid values
 				cout << "Please enter the first whole number: ";
 				cin >> numThree;
 				cout << "please enter the second whole number: ";
 				cin >> numFour;
 			}
 			resultTwo = computeGCD(numThree, numFour);	// calculate GCD and assign value to resultTwo
-			cout << "The GCD for " << numThree << " and " << numFour << " is " << resultOne << endl;
+			cout << "The GCD for " << numThree << " and "
+				 << numFour << " is " << resultTwo << endl;	// display results
 			break;
 
 		// user selects modulus
 		case 'J' :
+			//  collect user inputs
 			cout << "Please enter the first number: ";
 			cin >> numThree;
 			cout << "Please enter the second number: ";
 			cin >> numFour;
-			resultTwo = computeMod(numThree, numFour); // calculate modulus and assign value to resultTwo
-			cout << "The modulo of " << numThree << " and " << numFour << " is " << resultTwo << endl;
+			resultTwo = computeMod(numThree, numFour);  // calculate modulus and assign value to resultTwo
+			cout << "The modulo of " << numThree << " and "
+				 << numFour << " is " << resultTwo << endl;	// display results
 			break;
 
 		// if user selects quit
-		case 'L':
-			quit();
+		case 'K':
+			quit();		// display exit message
 			break;
 
 		// if user's input was invalid
@@ -241,8 +241,7 @@ int main()
 		}
 
 		cout << endl;
-
-	} while (menuChoice != 'L');
+	} while (menuChoice != 'K');
 	
 	system("pause");
 	return 1;
@@ -256,7 +255,7 @@ Purpose: print greeting message
 */
 void greeting()
 {
-	cout << "Welcome to my calculator program." << endl << endl;
+	cout << "Hello and Welcome to my calculator program!" << endl << endl;
 }
 
 /*
@@ -267,21 +266,21 @@ Purpose: print menu
 */
 void menu()
 {
-	cout << endl << "----------------------------" << endl;
-	cout << "        CALCULATOR" << endl;
-	cout << "----------------------------" << endl << endl;
+	cout << endl << "----------------------------------" << endl;
+	cout << "           CALCULATOR" << endl;
+	cout << "----------------------------------" << endl << endl;
 	cout << "A.)  ADDITION" << endl;
 	cout << "B.)  SUBTRACTION" << endl;
 	cout << "C.)  MULTIPLICATION" << endl;
 	cout << "D.)  DIVISION" << endl;
 	cout << "E.)  ROOTS (positive numbers only)" << endl;
-	cout << "F.)  POWERS (postive numbers only)" << endl;
+	cout << "F.)  POWERS (positive numbers only)" << endl;
 	cout << "G.)  PERCENTAGE" << endl;
-	cout << "H.)  LEAST  COMMON  MULTIPLIER" << endl;
-	cout << "I.)  GREATEST  COMMON  DIVISOR" << endl;
+	cout << "H.)  LEAST COMMON MULTIPLIER" << endl;
+	cout << "I.)  GREATEST COMMON DIVISOR" << endl;
 	cout << "J.)  MODULUS" << endl;
-	cout << "K.)  DISPLAY   FUNCTION  EXECUTION" << endl;
-	cout << "L.)  QUIT" << endl << endl;
+	cout << "K.)  QUIT" << endl << endl;
+	cout << "----------------------------------" << endl << endl;
 }
 
 /*
@@ -301,7 +300,7 @@ float computeSum(float a, float b)
 Author: Peter O'Donohue
 Creation Date: 03/13/17
 Modification Date: 03/13/17
-Purpose: calculate subraction
+Purpose: calculate subtraction
 */
 float computeSub(float a, float b)
 {
@@ -333,7 +332,6 @@ Purpose: calculate division
 float computeDiv(float a, float b)
 {
 	float c;
-
 	c = a / b;
 	return c;
 }
@@ -374,7 +372,7 @@ float computeRoot(float root, int index)
 Author: Peter O'Donohue
 Creation Date: 03/07/17
 Modification Date: 03/13/17
-Purpose: calculate powers
+Purpose: calculate power
 */
 float computePower(float a, int b)
 {
