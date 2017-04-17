@@ -1,7 +1,7 @@
 /*
 Author: Peter O'Donohue
 Creation Date: 04/08/17
-Modification Date: 04/11/17
+Modification Date: 04/17/17
 Purpose: Practice with c++
 */
 
@@ -30,11 +30,14 @@ char seatChart[1000][1000];
 int readFile(ifstream& inFile, int& row, int col);
 void quit();
 void menu();
+void help();
 void options();
 void greeting();
 void statistics(char seatChart[1000][1000], int rows, int cols);
-void cancelSeat(char seatChart[1000][1000], int rows, int cols);
-void reserveSeat(char seatChart[1000][1000], int rows, int cols);
+void cancelSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols);
+void reserveSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols);
+void calculateAisleSeat(char seatChart[1000][1000], int rows, int cols);
+void calculateWindowSeat(char seatChart[1000][1000], int rows, int cols);
 void saveChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols);
 void displayChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols);
 void fillArray(ifstream& inFile, char seatChart[1000][1000], int rows, int cols);
@@ -42,7 +45,7 @@ void fillArray(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 /*
 Author: Peter O'Donohue
 Creation Date: 04/08/17
-Modification Date: 04/11/17
+Modification Date: 04/17/17
 Purpose: main function
 */
 int main(){
@@ -53,6 +56,7 @@ int main(){
 	ifstream ins;
 	ofstream outs;
 	
+	// open input file
 	ins.open(chartIn);
 	if (ins.fail())
 		cout << "ERROR: Unable to open input file." << endl;
@@ -64,7 +68,9 @@ int main(){
 	menu();
 	cout << "Please select an option: "; // prompt user for choice
 	cin >> userChoice;
+	cout << "----------------------------------------------" << endl;
 
+	// switch case for each menu choice
 	do
 	{
 		switch (userChoice)
@@ -75,31 +81,37 @@ int main(){
 			break;
 
 		case 2 :
-			reserveSeat(seatChart, rowSize, colSize);
+			reserveSeat(ins, seatChart, rowSize, colSize);  // reserve seat
 			break;
 
 		case 3 :
-			cancelSeat(seatChart, rowSize, colSize);
+			cancelSeat(ins, seatChart, rowSize, colSize);  // cancel reservation
 			break;
 
 		case 4 :
-			saveChart(ins, seatChart, rowSize, colSize);
+			saveChart(ins, seatChart, rowSize, colSize);  // save seat chart to file
 			break;
 
 		case 5:
-			statistics(seatChart, rowSize, colSize);
+			statistics(seatChart, rowSize, colSize);  // display statistics
 			break;
 
-		case 7 :
+		case 6: 
+			help();
+			break;
+
+		case 7 :  // quit program
 			quit();
 			break;
 
 		default :
 			cout << "Error: Invalid input. " << endl;
 		}
-		options();
+
+		options(); // display menu options
 		cout << "Please select another option: ";
 		cin >> userChoice;
+		cout << "----------------------------------------------" << endl;
 	} while (userChoice != 7);
 	if (userChoice == 7)
 		quit();
@@ -145,7 +157,7 @@ Purpose: list of options
 */
 void options()
 {
-	cout << "----------------------------------------------" << endl << endl
+	cout << "--------------------MENU----------------------" << endl << endl
 	     << "1.) Display Seat Chat" << endl
 		 << "2.) Reserve Seat" << endl
 		 << "3.) Cancel Reservation" << endl
@@ -230,12 +242,12 @@ void fillArray(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 /*
 Author: Peter O'Donohue
 Creation Date: 04/11/17
-Modification Date: 04/15/17
+Modification Date: 04/17/17
 Purpose: display seat chart
 */
 void displayChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 {
-	cout << "----------------------------------------------" << endl << endl;
+	cout << "-------------------SEAT CHART-----------------" << endl << endl;
 	for (int i = 0; i < rows; ++i)
 	{
 		if (i >= 99)
@@ -247,7 +259,7 @@ void displayChart(ifstream& inFile, char seatChart[1000][1000], int rows, int co
 		
 		for (int j = 0; j < cols; ++j)
 		{
-			cout << seatChart[i][j] << "	";
+			cout << seatChart[i][j] << "  ";
 		}
 		cout << endl;
 	}
@@ -258,10 +270,10 @@ void displayChart(ifstream& inFile, char seatChart[1000][1000], int rows, int co
 /*
 Author: Peter O'Donohue
 Creation Date: 04/13/17
-Modification Date: 04/15/17
+Modification Date: 04/17/17
 Purpose: reserve seat
 */
-void reserveSeat(char seatChart[1000][1000], int rows, int cols)
+void reserveSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols)
 {
 	// variables to store user's seat choice
 	int userRow;
@@ -270,8 +282,12 @@ void reserveSeat(char seatChart[1000][1000], int rows, int cols)
 	char userSeat;
 	char reserved = 'X';
 
+	displayChart(ins, seatChart, rows, cols);  // display chart
+
 	// collect user input
-	cout << "Seats B and C are aisle seats, while A and D are windows seats." << endl;
+	cout << "Seats " << seatChart[0][(cols / 2) - 1] << " and " << seatChart[0][cols / 2]
+		<< " are aisle seats." << endl << "Seats " << seatChart[0][0] << " and " << seatChart[0][cols -1]
+		 << " are windows seats." << endl;
 	cout << "Please enter your desired row number and seat choice: ";
 	cin >> userRow >> userSeat;
 	tempRow = userRow;
@@ -295,18 +311,22 @@ void reserveSeat(char seatChart[1000][1000], int rows, int cols)
 /*
 Author: Peter O'Donohue
 Creation Date: 04/16/17
-Modification Date: 04/16/17
+Modification Date: 04/17/17
 Purpose: cancel reservation
 */
-void cancelSeat(char seatChart[1000][1000], int rows, int cols)
+void cancelSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols)
 {
 	int userRow;  // stores index row number
 	int userCol; // stores index column nmmber
 	int tempRow = 0; // stores row number for print
 	char userSeat;	// store user's seat choice
 
+	displayChart(ins, seatChart, rows, cols);  //display chart
+
 	// prompt user for seat to be cancelled
-	cout << "Seats B and C are aisle seats, while seats A and D are considered windows seats.";
+	cout << "Seats " << seatChart[0][(cols / 2) - 1] << " and " << seatChart[0][cols / 2]
+		<< " are aisle seats." << endl << "Seats " << seatChart[0][0] << " and " << seatChart[0][cols - 1]
+		<< " are window seats." << endl;
 	cout << "Enter the row number and letter for the seat you wish the cancel: ";
 	cin >> userRow >> userSeat;
 	userSeat = toupper(userSeat);
@@ -379,11 +399,11 @@ void statistics(char seatChart[1000][1000], int rows, int cols)
 {
 	int totalSeats;
 	int reservedSeats;
-	int availableSeats = 0;  // stores number of available seats
+	int availableSeats = 0;
+	int availableAisleSeats;// stores number of available seats
 	float rsrvdSeatsPrctg;
 
 	totalSeats = rows * cols; // calculate total seats
-	cout << totalSeats << endl;
 	// calculate number of available seats;
 	for (int i = 0; i < rows; ++i)
 	{
@@ -398,6 +418,77 @@ void statistics(char seatChart[1000][1000], int rows, int cols)
 	totalSeats = rows * cols; // calculate total seats
 	reservedSeats = totalSeats - availableSeats;
 	rsrvdSeatsPrctg = (float(reservedSeats) / float(totalSeats)) * 100;
-		
+	
+	// print results
+	cout << endl << "The total number of seats availabe is: " << availableSeats << endl;
+	cout << "The percentage of reserved seats is: " << fixed << setprecision(2) 
+		 << rsrvdSeatsPrctg << "%" << endl;
+	calculateAisleSeat(seatChart, rows, cols);  // calculate and print available aisle seats
+	calculateWindowSeat(seatChart, rows, cols);  // calculate and print available window seats
+	cout << endl;
+	
+	return;
+}
+
+/*
+Author: Peter O'Donohue
+Creation Date: 04/17/17
+Modification Date: 04/17/17
+Purpose: calculate available aisle seats
+*/
+void calculateAisleSeat(char seatChart[1000][1000], int rows, int cols)
+{
+	cout << "The following aisle seats are still available for reservation:" << endl;
+	for (int i = 0; i < rows; ++i)
+	{
+		if (seatChart[i][(cols / 2) - 1] != 'X') // verify aisle seat isn't reserved
+			cout << i + 1 << seatChart[i][(cols / 2) - 1] << " "; // print available aisle seat
+		if (seatChart[i][cols / 2] != 'X')  // verify aisle seat isn't reserved
+			cout << i + 1 << seatChart[i][cols / 2] << " "; // print available aisle seat
+		if (i == (rows / 2) + 1)
+			cout << endl;
+
+	}
+	cout << endl;
+	return;
+}
+
+/*
+Author: Peter O'Donohue
+Creation Date: 04/17/17
+Modification Date: 04/17/17
+Purpose: calculate available window seats
+*/
+void calculateWindowSeat(char seatChart[1000][1000], int rows, int cols)
+{
+	cout << "The following window seats are still available for reservation:" << endl;
+	for (int i = 0; i < rows; ++i)
+	{
+		if (seatChart[i][0] != 'X')  // verify window seat isn't reserved
+			cout << i + 1 << seatChart[i][0] << " ";  // print available window seat
+		if (seatChart[i][cols - 1] != 'X')  // verifiy window seat isn't reserved
+			cout << i + 1 << seatChart[i][cols - 1] << " "; // print available window seat
+		if (i == (rows / 2) + 1)
+			cout << endl;
+
+	}
+	cout << endl;
+	return;
+}
+
+/*
+Author: Peter O'Donohue
+Creation Date: 04/17/17
+Modification Date: 04/17/17
+Purpose: help message
+*/
+void help()
+{
+	cout << "                DIRECTIONS          "
+	     << endl << "Start out by displaying the seat chart and reserving a single seat." << endl
+		 << "You can reserve a seat by typing in the row number and seat letter (e.g., 2D, 10A, 7C)"
+		 << endl << "Once you've reserved a seat, verify that seat was reserved by "
+		 << "dispalying the seat chart once more." << endl
+		 << "Reserved seats are marked with an 'X'. " << endl << endl;
 	return;
 }
