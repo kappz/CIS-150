@@ -1,7 +1,7 @@
 /*
 Author: Peter O'Donohue
 Creation Date: 04/08/17
-Modification Date: 04/18/17
+Modification Date: 04/19/17
 Purpose: Practice with c++
 */
 
@@ -16,12 +16,11 @@ Purpose: Practice with c++
 #include <string>
 #include <fstream>
 #include <iomanip>
+
 using namespace std;
 
-
-
 // input file
-#define chartIn "chartIn2.txt"
+#define chartIn "chartIn3.txt"
 
 // seat chart array
 char seatChart[1000][1000];
@@ -31,7 +30,6 @@ int readFile(ifstream& inFile, int& row, int col);
 void quit();
 void menu();
 void help();
-void options();
 void greeting();
 void statistics(char seatChart[1000][1000], int rows, int cols);
 void cancelSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols);
@@ -45,16 +43,16 @@ void fillArray(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 /*
 Author: Peter O'Donohue
 Creation Date: 04/08/17
-Modification Date: 04/18/17
+Modification Date: 04/19/17
 Purpose: main function
 */
 int main(){
 	// main variables
-	int userChoice;
-	int rowSize = 0;
-	int colSize = 1;
-	ifstream ins;
-	ofstream outs;
+	int userChoice;  // stores user's choice
+	int rowSize = 0;  // stores number of rows 
+	int colSize = 1;  // stores snumber of columns
+	ifstream ins;    // reads data in text file data to stream
+	ofstream outs;   // writes data to text file using stream
 	
 	// open input file
 	ins.open(chartIn);
@@ -64,45 +62,46 @@ int main(){
 	colSize = readFile(ins, rowSize, colSize); // compute number of rows and columns
 	fillArray(ins, seatChart, rowSize, colSize); // fill array with data from text file
 	
-	// display menu
-	menu();
-	cout << "Please select an option: "; // prompt user for choice
-	cin >> userChoice;
-	cout << endl;
-	
+	greeting();  // display greeting message
 
 	// switch case for each menu choice
 	do
 	{
+		// display menu
+		menu();
+		cout << "Please select an option: "; // prompt user for choice
+		cin >> userChoice;
+		cout << endl;
+
 		switch (userChoice)
 		{
 
-		case 1:
+		case 1:  // user chooses to display chart
 			displayChart(ins, seatChart, rowSize, colSize); // display seat chart
 			system("pause");
 			break;
 
-		case 2 :
+		case 2 :  // user chooses to reserve a seat
 			reserveSeat(ins, seatChart, rowSize, colSize);  // reserve seat
 			system("pause");
 			break;
 
-		case 3 :
+		case 3 :  // user chooses to cancel a reserved seat
 			cancelSeat(ins, seatChart, rowSize, colSize);  // cancel reservation
 			system("pause");
 			break;
 
-		case 4 :
+		case 4 :  // user would like to save seat chart to a file
 			saveChart(ins, seatChart, rowSize, colSize);  // save seat chart to file
 			system("pause");
 			break;
 
-		case 5:
+		case 5:  // user displays statistics
 			statistics(seatChart, rowSize, colSize);  // display statistics
 			system("pause");
 			break;
 
-		case 6: 
+		case 6:   // user chooses help
 			help();
 			system("pause");
 			break;
@@ -111,18 +110,10 @@ int main(){
 			quit();
 			break;
 
-		default :
-			cout << "Error: Invalid input. " << endl; // error message if user types an invalid menu option
+		default :  // user selects an invalid option
+			cout << "Error: Invalid input. " << endl; 
 		}
-
-		options(); // display menu options
-		cout << "Please select another option: ";
-		cin >> userChoice;
-		cout << endl;
-		
 	} while (userChoice != 7);
-	if (userChoice == 7)
-		quit();
 
 	ins.close();  // close input file
 	outs.close();  // close output file
@@ -135,11 +126,14 @@ int main(){
 /*
 Author: Peter O'Donohue
 Creation Date: 04/11/17
-Modification Date: 04/11/17
+Modification Date: 04/19/17
 Purpose: greeting message
 */
 void greeting()
 {
+	cout << "----------------------------------------------" << endl
+		<< "   *  *  AIRPLANE SEAT SELECTOR  *  *" << endl
+		<< "----------------------------------------------" << endl;
 	cout << endl << "Hello!" << endl << "This program will help you reserve seats" << endl
 		<< "for your flight." << endl << "Below is a menu to help guide you through" << endl
 		<< "the process." << endl << endl;
@@ -161,37 +155,20 @@ void quit()
 /*
 Author: Peter O'Donohue
 Creation Date: 04/11/17
-Modification Date: 04/11/17
-Purpose: list of options
-*/
-void options()
-{
-	cout << "--------------------MENU----------------------" << endl << endl
-	     << "1.) Display Seat Chat" << endl
-		 << "2.) Reserve Seat" << endl
-		 << "3.) Cancel Reservation" << endl
-		 << "4.) Save Seat Chart to File" << endl
-		 << "5.) Statistics" << endl
-		 << "6.) Help" << endl
-		 << "7.) Quit" << endl << endl
-	     << "----------------------------------------------" << endl;
-	return;
-}
-
-/*
-Author: Peter O'Donohue
-Creation Date: 04/11/17
-Modification Date: 04/11/17
+Modification Date: 04/19/17
 Purpose: menu
 */
 void menu()
 {
-	cout << "----------------------------------------------" << endl
-		 << "   *  *  AIRPLANE SEAT SELECTOR  *  *" << endl
-		 << "----------------------------------------------" << endl;
-
-	greeting();  //display greeting message
-	options();  // display list of options4
+	cout << "--------------------MENU----------------------" << endl << endl
+		<< "1.) Display Seat Chat" << endl
+		<< "2.) Reserve Seat" << endl
+		<< "3.) Cancel Reservation" << endl
+		<< "4.) Save Seat Chart to File" << endl
+		<< "5.) Statistics" << endl
+		<< "6.) Help" << endl
+		<< "7.) Quit" << endl << endl
+		<< "----------------------------------------------" << endl;
 	return;
 }
 
@@ -251,24 +228,24 @@ void fillArray(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 /*
 Author: Peter O'Donohue
 Creation Date: 04/11/17
-Modification Date: 04/17/17
+Modification Date: 04/19/17
 Purpose: display seat chart
 */
 void displayChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 {
 	cout << "-------------------SEAT CHART-----------------" << endl << endl;
-	for (int i = 0; i < rows; ++i)
+	for (int i = 0; i < rows; ++i)  // loop through each array element
 	{
 		if (i >= 99)
-			cout << "ROW " << i + 1 << setw(3);
+			cout << "ROW " << i + 1 << setw(3);  // adjusts spacing
 		else if (i >= 9 && i <= 98)
-			cout << "ROW " << i + 1 << setw(4);
+			cout << "ROW " << i + 1 << setw(4);  // adjusts spacing
 		else
-		cout << "ROW " << i + 1 << setw(5);
+		cout << "ROW " << i + 1 << setw(5);  // adjusts spacing
 		
 		for (int j = 0; j < cols; ++j)
 		{
-			cout << seatChart[i][j] << "  ";
+			cout << seatChart[i][j] << "  ";  // display each array element
 		}
 		cout << endl;
 	}
@@ -294,18 +271,17 @@ void reserveSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols)
 	displayChart(ins, seatChart, rows, cols);  // display chart
 
 	cout << "---------------RESERVE SEATS------------------" << endl;
-	// collect user input
-	cout << "Seats " << seatChart[0][(cols / 2) - 1] << " and " << seatChart[0][cols / 2]
-		<< " are aisle seats." << endl << "Seats " << seatChart[0][0] << " and " << seatChart[0][cols -1]
-		 << " are windows seats." << endl;
+	cout << "Seats " << seatChart[0][(cols / 2) - 1] << " and " << seatChart[0][cols / 2]  // aisle seats
+		<< " are aisle seats." << endl << "Seats " << seatChart[0][0] << " and " << seatChart[0][cols -1] 
+		 << " are windows seats." << endl;  // window seats
 	cout << "Please enter your desired row number and seat choice: ";
-	cin >> userRow >> userSeat;
+	cin >> userRow >> userSeat;  // collect user's seat choice
 	tempRow = userRow;
 
-		tempRow -= 1;
+		tempRow -= 1; // adjust user's choice to allign with correct array row 
 		
 		userSeat = toupper(userSeat);
-		userCol = int(userSeat) - 65;
+		userCol = int(userSeat) - 65;  // assign ascii value to userSeat
 		if (userSeat == seatChart[tempRow][userCol])
 		{
 			cout << "Seat " << userRow << userSeat << " reserved." << endl;
@@ -327,7 +303,7 @@ Purpose: cancel reservation
 void cancelSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols)
 {
 	int userRow;  // stores index row number
-	int userCol; // stores index column nmmber
+	int userCol; // stores index column number
 	int tempRow = 0; // stores row number for print
 	char userSeat;	// store user's seat choice
 
@@ -356,14 +332,13 @@ void cancelSeat(ifstream& ins, char seatChart[1000][1000], int rows, int cols)
 		cout << "Unable to cancel reservation, seat " << tempRow << userSeat
 			 << " has not yet been reserved." << endl;
 	}
-
 	return;
 }
 
 /*
 Author: Peter O'Donohue
 Creation Date: 04/11/17
-Modification Date: 04/18/17
+Modification Date: 04/19/17
 Purpose: save seat chart
 */
 void saveChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
@@ -374,12 +349,13 @@ void saveChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 	cout << "--------------SAVE SEAT CHART-----------------" << endl;
 	cout << "Enter a file name to store the seat chart in: ";
 	cin >> fileName;
-	outs.open(fileName.c_str());
+	outs.open(fileName.c_str());  // open user's file
 	if (outs.fail())
 		cout << "Error: Failed to open file." << endl;
 	else
-		for (int i = 0; i < rows; ++i)
+		for (int i = 0; i < rows; ++i)  // for loop for each row
 		{
+			// display each element and adjust spacing
 			outs << "Row " << i + 1;
 			if ((i >= 99) && (i < 999))
 				outs << "    ";
@@ -387,7 +363,7 @@ void saveChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 				outs << "      ";
 			else
 				outs << "        ";
-			for (int j = 0; j < cols; ++j)
+			for (int j = 0; j < cols; ++j)  // for loop for each column
 			{
 				outs.put(seatChart[i][j]);
 				outs << "      ";
@@ -404,18 +380,18 @@ void saveChart(ifstream& inFile, char seatChart[1000][1000], int rows, int cols)
 /*
 Author: Peter O'Donohue
 Creation Date: 04/16/17
-Modification Date: 04/18/17
+Modification Date: 04/19/17
 Purpose: statistics
 */
 void statistics(char seatChart[1000][1000], int rows, int cols)
 {
-	int totalSeats;
-	int reservedSeats;
-	int availableSeats = 0;
-	int availableAisleSeats;// stores number of available seats
-	float rsrvdSeatsPrctg;
+	int totalSeats;  // stores total seats
+	int reservedSeats;  // stores number of reserved seats
+	int availableSeats = 0;  // stores number of available seats
+	float rsrvdSeatsPrctg;  // stores percentage of reserved seats
 	cout << "-----------------STATISTICS-------------------" << endl;
 	totalSeats = rows * cols; // calculate total seats
+
 	// calculate number of available seats;
 	for (int i = 0; i < rows; ++i)
 	{
